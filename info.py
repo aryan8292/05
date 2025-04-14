@@ -121,7 +121,7 @@ VERIFY_SND_SHORTLINK_API = environ.get('VERIFY_SND_SHORTLINK_API', '')
 
 
 # Shortlink Info
-SHORTLINK_MODE = bool(environ.get('SHORTLINK_MODE', True)) # Set True Or False
+SHORTLINK_MODE = bool(environ.get('SHORTLINK_MODE', False)) # Set True Or False
 SHORTLINK_URL = environ.get('SHORTLINK_URL', 'arlinks.in')
 SHORTLINK_API = environ.get('SHORTLINK_API', '2b9ca12568f523343b5fe52565166d4cd98a4702')
 TUTORIAL = environ.get('TUTORIAL', 'https://t.me/How_to_Open0') # How Open Shortner Link Video Link , Channel Link Where You Upload Your Video.
