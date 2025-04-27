@@ -1,7 +1,7 @@
 from pyrogram import Client
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import Message
-from database import save_file
+from database.ia_filterdb import save_file  # ✅ fixed import
 import asyncio
 
 async def index_files(bot: Client, msg: Message, chat_id: int, lst_msg_id: int = 0):
@@ -13,7 +13,6 @@ async def index_files(bot: Client, msg: Message, chat_id: int, lst_msg_id: int =
         return
 
     total = 0
-    current = 0
     failed = 0
 
     try:
@@ -22,7 +21,7 @@ async def index_files(bot: Client, msg: Message, chat_id: int, lst_msg_id: int =
         await msg.edit(f"**Unable to get total messages:** `{e}`")
         return
 
-    temp = type('obj', (object,), {'CURRENT': 0})()  # creating a temporary object to hold current value
+    temp = type('obj', (object,), {'CURRENT': 0})()
 
     async def update_progress():
         try:
@@ -47,14 +46,7 @@ async def index_files(bot: Client, msg: Message, chat_id: int, lst_msg_id: int =
                 failed += 1
                 continue
 
-            media = None
-
-            if message.video:
-                media = message.video
-            elif message.document:
-                media = message.document
-            elif message.audio:
-                media = message.audio
+            media = message.video or message.document or message.audio
 
             if media:
                 try:
@@ -65,11 +57,9 @@ async def index_files(bot: Client, msg: Message, chat_id: int, lst_msg_id: int =
             else:
                 failed += 1
 
-            # Edit progress every 100 files (optimized)
             if temp.CURRENT % 100 == 0:
                 await update_progress()
 
-        # Final update after completion
         await update_progress()
 
         await msg.edit(
@@ -81,4 +71,3 @@ async def index_files(bot: Client, msg: Message, chat_id: int, lst_msg_id: int =
 
     except Exception as e:
         await msg.edit(f"**Unexpected Error:** `{e}`")
-
